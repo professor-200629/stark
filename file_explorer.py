@@ -6,7 +6,6 @@ import os
 import sys
 import shutil
 import subprocess
-from typing import Optional, List, Dict
 
 
 class FileExplorer:

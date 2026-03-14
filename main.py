@@ -15,19 +15,19 @@ from datetime import datetime
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 import config
-from stark_brain.voice_engine import VoiceEngine
-from stark_brain.listener import VoiceListener, KeyboardListener
-from stark_brain.own_brain import OwnBrain
-from stark_brain.code_brain import CodeBrain
-from stark_brain.screen_monitor import ScreenMonitor
-from stark_brain.camera_vision import CameraVision
-from stark_brain.code_editor import CodeEditor
-from stark_brain.file_explorer import FileExplorer
-from stark_brain.browser_controller import BrowserController
-from stark_brain.app_controller import AppController
-from stark_brain.communication import CommunicationManager
-from stark_brain.meeting_assistant import MeetingAssistant
-from stark_brain.memory_manager import MemoryManager
+from voice_engine import VoiceEngine
+from listener import VoiceListener, KeyboardListener
+from own_brain import OwnBrain
+from code_brain import CodeBrain
+from screen_monitor import ScreenMonitor
+from camera_vision import CameraVision
+from code_editor import CodeEditor
+from file_explorer import FileExplorer
+from browser_controller import BrowserController
+from app_controller import AppController
+from communication import CommunicationManager
+from meeting_assistant import MeetingAssistant
+from memory_manager import MemoryManager
 
 
 class STARK:
@@ -302,7 +302,7 @@ class STARK:
                 return
         
         # Skip ad command - detect "skip" alone or "skip ad"
-        if cmd.strip() == "skip" or "skip" in cmd:
+        if cmd.strip() in ["skip", "skip ad", "skip advertisement"]:
             self._speak("Skipping the advertisement for you, Sir.")
             self.browser.youtube_skip_ad()
             return
@@ -398,12 +398,6 @@ class STARK:
                 self._speak("Sir, screenshot saved as stark_screenshot.png.")
             except Exception as e:
                 self._speak(f"Sir, I couldn't take a screenshot: {e}")
-            return
-
-        if "spotify" in cmd:
-            song = cmd.replace("play", "").replace("on spotify", "").replace("spotify", "").strip()
-            self._speak(f"Playing {song} on Spotify, Sir.")
-            self.browser.search_spotify(song)
             return
 
         # Streaming services
@@ -669,18 +663,18 @@ class STARK:
     def shutdown(self):
         print("\n[STARK] Shutting down...")
         self.is_running = False
-        try: self.camera.stop_camera()
-        except: pass
-        try: self.screen.stop_monitoring()
-        except: pass
-        try: self.listener.stop_listening()
-        except: pass
-        try: self.meeting.close()
-        except: pass
-        try: self.memory.end_work_session(); self.memory.save()
-        except: pass
-        try: self.voice.shutdown()
-        except: pass
+        for name, cleanup in [
+            ("Camera", lambda: self.camera.stop_camera()),
+            ("Screen", lambda: self.screen.stop_monitoring()),
+            ("Listener", lambda: self.listener.stop_listening()),
+            ("Meeting", lambda: self.meeting.close()),
+            ("Memory", lambda: (self.memory.end_work_session(), self.memory.save())),
+            ("Voice", lambda: self.voice.shutdown()),
+        ]:
+            try:
+                cleanup()
+            except Exception as e:
+                print(f"[STARK] Error stopping {name}: {e}")
         print("[STARK] Goodbye Sir!")
         sys.exit()
 

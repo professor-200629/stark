@@ -4,7 +4,7 @@ STARK Code Brain - Code Analysis, Debugging & Generation
 
 import re
 import os
-from typing import Optional, List, Dict, Tuple
+from typing import Dict
 
 try:
     import google.generativeai as genai
@@ -12,8 +12,6 @@ try:
 except Exception:
     GEMINI_AVAILABLE = False
 
-import sys
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import config
 
 
