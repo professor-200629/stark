@@ -17,7 +17,7 @@ import sys
 import os
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import config
-from .utils import safe_type as _safe_type
+from utils import safe_type as _safe_type
 
 
 class BrowserController:
@@ -203,6 +203,14 @@ class BrowserController:
             url = 'https://' + url
         webbrowser.open(url)
         return f"Sir, opened {url}"
+
+    def open_website(self, url: str) -> str:
+        result = self.open_url(url)
+        # Normalise the URL in case open_url prepended https://
+        if not url.startswith('http'):
+            url = 'https://' + url
+        self.current_site = url
+        return result
 
     def search_web(self, query: str) -> str:
         url = f"https://www.google.com/search?q={query.replace(' ', '+')}"

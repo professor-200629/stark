@@ -6,6 +6,7 @@
 """
 
 import os
+import re
 import sys
 import time
 import threading
@@ -15,19 +16,19 @@ from datetime import datetime
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 import config
-from stark_brain.voice_engine import VoiceEngine
-from stark_brain.listener import VoiceListener, KeyboardListener
-from stark_brain.own_brain import OwnBrain
-from stark_brain.code_brain import CodeBrain
-from stark_brain.screen_monitor import ScreenMonitor
-from stark_brain.camera_vision import CameraVision
-from stark_brain.code_editor import CodeEditor
-from stark_brain.file_explorer import FileExplorer
-from stark_brain.browser_controller import BrowserController
-from stark_brain.app_controller import AppController
-from stark_brain.communication import CommunicationManager
-from stark_brain.meeting_assistant import MeetingAssistant
-from stark_brain.memory_manager import MemoryManager
+from voice_engine import VoiceEngine
+from listener import VoiceListener, KeyboardListener
+from own_brain import OwnBrain
+from code_brain import CodeBrain
+from screen_monitor import ScreenMonitor
+from camera_vision import CameraVision
+from code_editor import CodeEditor
+from file_explorer import FileExplorer
+from browser_controller import BrowserController
+from app_controller import AppController
+from communication import CommunicationManager
+from meeting_assistant import MeetingAssistant
+from memory_manager import MemoryManager
 
 
 class STARK:
@@ -124,6 +125,8 @@ class STARK:
             time.sleep(60)
             if not self.is_running: break
             
+            if self.work_start is None:
+                continue
             elapsed = time.time() - self.work_start
             
             # Rest reminder
@@ -206,16 +209,8 @@ class STARK:
             self.shutdown()
             return
 
-        # 2. PERSONALITY / GREETINGS
-        if any(w in cmd for w in ["how are you", "how do you feel", "what's up"]):
-            self._speak(random.choice(["I am functioning perfectly, Sir! Ready to assist you.", "All systems are green, Sir! How can I help?", "I'm excellent Sir! Always a pleasure to be of service."]))
-            return
-        
-        if any(w in cmd for w in ["hello", "hi", "hey", "stark"]):
-            self._speak(random.choice(["Yes Sir!", "At your service, Sir!", "Hello Sir! What can I do for you?"]))
-            return
-
-        # 3. COMMUNICATION (WHATSAPP, TELEGRAM, CALLS)
+        # 2. COMMUNICATION (WHATSAPP, TELEGRAM, CALLS)
+        # Checked before greetings so "hi" in a message doesn't trigger greeting handler
         if "whatsapp" in cmd or "message" in cmd or "call" in cmd:
             # Handle Mummy messages/calls first
             if "mummy" in cmd or "mom" in cmd or "mother" in cmd:
@@ -242,6 +237,16 @@ class STARK:
             else:
                 self._speak("Sir, who should I send the message to?")
                 return
+
+        # 3. PERSONALITY / GREETINGS (checked after communication so commands
+        # containing greetings like "say hi in whatsapp" are handled correctly)
+        if any(w in cmd for w in ["how are you", "how do you feel", "what's up"]):
+            self._speak(random.choice(["I am functioning perfectly, Sir! Ready to assist you.", "All systems are green, Sir! How can I help?", "I'm excellent Sir! Always a pleasure to be of service."]))
+            return
+        
+        if any(w in cmd for w in ["hello", "hi", "hey", "stark"]):
+            self._speak(random.choice(["Yes Sir!", "At your service, Sir!", "Hello Sir! What can I do for you?"]))
+            return
 
         # 4. YOUTUBE / SPOTIFY / MEDIA / WEBSITES
         # Handle combined "open youtube play X" command
@@ -301,8 +306,8 @@ class STARK:
                 self.browser.youtube_search(query)
                 return
         
-        # Skip ad command - detect "skip" alone or "skip ad"
-        if cmd.strip() == "skip" or "skip" in cmd:
+        # Skip ad command - only match "skip", "skip ad", or "skip advertisement"
+        if cmd.strip() in ["skip", "skip ad", "skip advertisement", "skip the ad", "skip the advertisement"]:
             self._speak("Skipping the advertisement for you, Sir.")
             self.browser.youtube_skip_ad()
             return
@@ -348,20 +353,19 @@ class STARK:
                 return
 
         # SYSTEM CONTROLS - Volume, Brightness, etc.
-        if any(w in cmd for w in ["volume up", "increase volume", "louder"]):
-            self._speak("Increasing volume, Sir.")
-            self.browser.volume_up()
-            return
-        
-        if any(w in cmd for w in ["volume down", "decrease volume", "quieter", "lower volume"]):
-            self._speak("Decreasing volume, Sir.")
-            self.browser.volume_down()
-            return
-        
-        if any(w in cmd for w in ["mute", "unmute"]):
-            self._speak("Toggling mute, Sir.")
-            self.browser.volume_mute()
-            return
+        if "volume" in cmd:
+            if any(w in cmd for w in ["up", "increase", "louder", "higher", "raise"]):
+                self._speak("Increasing volume, Sir.")
+                self.browser.volume_up()
+                return
+            elif any(w in cmd for w in ["down", "decrease", "lower", "quieter", "reduce"]):
+                self._speak("Decreasing volume, Sir.")
+                self.browser.volume_down()
+                return
+            elif any(w in cmd for w in ["mute", "unmute", "silent"]):
+                self._speak("Toggling mute, Sir.")
+                self.browser.volume_mute()
+                return
         
         if "brightness" in cmd:
             if any(w in cmd for w in ["up", "increase", "higher", "more"]):
@@ -503,6 +507,21 @@ class STARK:
             "stackoverflow": ("stackoverflow.com", "Stack Overflow"),
             "wikipedia": ("wikipedia.org", "Wikipedia"),
         }
+
+        # Handle "open google and search X" or "search X on google" before
+        # the generic website-open block so the query isn't lost.
+        # Skip if it's a file/folder search command.
+        if "search" in cmd and "file" not in cmd and "folder" not in cmd:
+            # Extract search query: everything after "search"
+            query = cmd.split("search", 1)[-1].strip()
+            # Remove trailing phrases like "on google", "in google", etc.
+            for suffix in ["on google", "in google", "using google", "on the web", "online"]:
+                if query.endswith(suffix):
+                    query = query[: -len(suffix)].strip()
+            if query:
+                self._speak(f"Searching for '{query}', Sir.")
+                self.browser.search_web(query)
+                return
         
         for keyword, (url, name) in website_keywords.items():
             if keyword in cmd and "open" in cmd:
@@ -670,17 +689,17 @@ class STARK:
         print("\n[STARK] Shutting down...")
         self.is_running = False
         try: self.camera.stop_camera()
-        except: pass
+        except Exception: pass
         try: self.screen.stop_monitoring()
-        except: pass
+        except Exception: pass
         try: self.listener.stop_listening()
-        except: pass
+        except Exception: pass
         try: self.meeting.close()
-        except: pass
+        except Exception: pass
         try: self.memory.end_work_session(); self.memory.save()
-        except: pass
+        except Exception: pass
         try: self.voice.shutdown()
-        except: pass
+        except Exception: pass
         print("[STARK] Goodbye Sir!")
         sys.exit()
 
@@ -726,8 +745,6 @@ class STARK:
 
     def _handle_timer(self, cmd: str):
         """Handle timer and alarm commands."""
-        import re
-        
         # Extract numbers from command
         numbers = re.findall(r'(\d+)', cmd)
         if not numbers:
@@ -766,7 +783,6 @@ class STARK:
             except Exception:
                 pass
         
-        import threading
         threading.Thread(target=timer_callback, daemon=True).start()
 
 
