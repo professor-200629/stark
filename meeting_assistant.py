@@ -6,11 +6,7 @@ Shows answers on screen (no voice) during meetings
 import threading
 import time
 from datetime import datetime
-from typing import Optional
 
-import sys
-import os
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import config
 
 

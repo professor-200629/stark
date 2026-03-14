@@ -5,7 +5,7 @@ NO BUTTON PRESSES - Fully automatic live monitoring
 
 import threading
 import time
-from typing import Dict, List, Optional
+from typing import Dict, List
 
 try:
     import cv2
@@ -32,9 +32,6 @@ try:
 except Exception:
     YOLO_AVAILABLE = False
 
-import sys
-import os
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import config
 
 
@@ -44,6 +41,7 @@ class CameraVision:
     def __init__(self):
         self.camera = None
         self.is_running = False
+        self._lock = threading.Lock()
         self.current_frame = None
 
         self.detected_objects = []
@@ -117,7 +115,9 @@ class CameraVision:
             while self.is_running:
                 ret, frame = self.camera.read()
                 if ret:
-                    self.current_frame = frame.copy()
+                    frame_copy = frame.copy()
+                    with self._lock:
+                        self.current_frame = frame_copy
 
                     if self.show_window:
                         self._display_frame(frame)
@@ -137,18 +137,24 @@ class CameraVision:
     def _display_frame(self, frame):
         display = frame.copy()
 
-        for (x, y, w, h) in self.face_locations:
+        with self._lock:
+            face_locs = list(self.face_locations)
+            stable_emotion = self.stable_emotion
+            detected_faces = self.detected_faces
+            detected_objects = list(self.detected_objects)
+
+        for (x, y, w, h) in face_locs:
             cv2.rectangle(display, (x, y), (x + w, y + h), (0, 255, 0), 2)
 
         cv2.putText(display, "STARK VISION - LIVE", (10, 30),
                     cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 255, 0), 2)
-        cv2.putText(display, f"Emotion: {self.stable_emotion}", (10, 60),
+        cv2.putText(display, f"Emotion: {stable_emotion}", (10, 60),
                     cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255, 255, 0), 2)
-        cv2.putText(display, f"Faces: {self.detected_faces}", (10, 90),
+        cv2.putText(display, f"Faces: {detected_faces}", (10, 90),
                     cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255, 255, 0), 2)
 
-        if self.detected_objects:
-            obj_text = f"Objects: {', '.join(set(o['name'] for o in self.detected_objects[:3]))}"
+        if detected_objects:
+            obj_text = f"Objects: {', '.join(set(o['name'] for o in detected_objects[:3]))}"
             cv2.putText(display, obj_text, (10, 120),
                         cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 200, 0), 1)
 
@@ -161,7 +167,8 @@ class CameraVision:
                 if (current_time - self.last_analysis_time >= self.analysis_interval
                         and self.current_frame is not None):
 
-                    frame = self.current_frame.copy()
+                    with self._lock:
+                        frame = self.current_frame.copy()
                     self._detect_faces(frame)
                     self._detect_emotions(frame)
                     self._detect_objects(frame)
@@ -180,17 +187,20 @@ class CameraVision:
         try:
             gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
             faces = self.face_cascade.detectMultiScale(gray, 1.1, 4)
-            self.face_locations = list(faces)
-            self.detected_faces = len(faces)
-            if self.detected_faces > 0 and self.on_person_detected:
-                self.on_person_detected(self.detected_faces)
-        except Exception:
-            pass
+            with self._lock:
+                self.face_locations = list(faces)
+                self.detected_faces = len(faces)
+            if len(faces) > 0 and self.on_person_detected:
+                self.on_person_detected(len(faces))
+        except Exception as e:
+            print(f"[Camera] Face detection error: {e}")
 
     def _detect_emotions(self, frame):
-        previous_emotion = self.stable_emotion
+        with self._lock:
+            previous_emotion = self.stable_emotion
+            current_faces = self.detected_faces
         try:
-            if DEEPFACE_AVAILABLE and self.detected_faces > 0:
+            if DEEPFACE_AVAILABLE and current_faces > 0:
                 results = DeepFace.analyze(
                     frame,
                     actions=['emotion'],
@@ -198,24 +208,29 @@ class CameraVision:
                     silent=True
                 )
                 if isinstance(results, list) and results:
-                    self.detected_emotion = results[0].get('dominant_emotion', 'neutral')
+                    detected_emotion = results[0].get('dominant_emotion', 'neutral')
                 elif isinstance(results, dict):
-                    self.detected_emotion = results.get('dominant_emotion', 'neutral')
+                    detected_emotion = results.get('dominant_emotion', 'neutral')
+                else:
+                    detected_emotion = 'neutral'
 
-                self.emotion_history.append(self.detected_emotion)
-                if len(self.emotion_history) > 5:
-                    self.emotion_history.pop(0)
-                if len(self.emotion_history) >= 3:
-                    if len(set(self.emotion_history[-3:])) == 1:
-                        self.stable_emotion = self.detected_emotion
+                with self._lock:
+                    self.detected_emotion = detected_emotion
+                    self.emotion_history.append(detected_emotion)
+                    if len(self.emotion_history) > 5:
+                        self.emotion_history.pop(0)
+                    if len(self.emotion_history) >= 3:
+                        if len(set(self.emotion_history[-3:])) == 1:
+                            self.stable_emotion = detected_emotion
+                    new_stable = self.stable_emotion
 
-                if self.stable_emotion != previous_emotion and self.on_emotion_change:
-                    self.on_emotion_change(self.stable_emotion)
-        except Exception:
-            pass
+                if new_stable != previous_emotion and self.on_emotion_change:
+                    self.on_emotion_change(new_stable)
+        except Exception as e:
+            print(f"[Camera] Emotion detection error: {e}")
 
     def _detect_objects(self, frame):
-        self.detected_objects = []
+        new_objects = []
         try:
             if self.yolo_model and NUMPY_AVAILABLE:
                 results = self.yolo_model(frame, verbose=False)
@@ -225,49 +240,64 @@ class CameraVision:
                         name = self.yolo_model.names[cls]
                         conf = float(box.conf[0])
                         if conf > 0.5:
-                            self.detected_objects.append({
+                            new_objects.append({
                                 'name': name,
                                 'confidence': round(conf, 2)
                             })
-                if self.detected_objects and self.on_object_detected:
-                    unique_objects = list(set(o['name'] for o in self.detected_objects))
+                if new_objects and self.on_object_detected:
+                    unique_objects = list(set(o['name'] for o in new_objects))
                     self.on_object_detected(unique_objects)
-        except Exception:
-            pass
+        except Exception as e:
+            print(f"[Camera] Object detection error: {e}")
+        with self._lock:
+            self.detected_objects = new_objects
 
     def _build_analysis(self):
+        with self._lock:
+            detected_faces = self.detected_faces
+            stable_emotion = self.stable_emotion
+            detected_objects = list(self.detected_objects)
         parts = []
-        if self.detected_faces > 0:
-            parts.append(f"I can see {self.detected_faces} person")
-            if self.stable_emotion and self.stable_emotion not in ['unknown', '']:
-                parts.append(f"appearing {self.stable_emotion}")
-        if self.detected_objects:
-            unique = list(set(obj['name'] for obj in self.detected_objects))
+        if detected_faces > 0:
+            parts.append(f"I can see {detected_faces} person")
+            if stable_emotion and stable_emotion not in ['unknown', '']:
+                parts.append(f"appearing {stable_emotion}")
+        if detected_objects:
+            unique = list(set(obj['name'] for obj in detected_objects))
             if unique:
                 parts.append(f"I notice: {', '.join(unique[:5])}")
-        self.analysis_result = ". ".join(parts) + "." if parts else ""
+        with self._lock:
+            self.analysis_result = ". ".join(parts) + "." if parts else ""
 
     def get_current_analysis(self) -> Dict:
-        return {
-            'emotion': self.stable_emotion,
-            'faces': self.detected_faces,
-            'objects': self.detected_objects,
-            'summary': self.analysis_result,
-            'timestamp': time.time()
-        }
+        with self._lock:
+            return {
+                'emotion': self.stable_emotion,
+                'faces': self.detected_faces,
+                'objects': list(self.detected_objects),
+                'summary': self.analysis_result,
+                'timestamp': time.time()
+            }
 
     def describe_what_you_see(self) -> str:
         """Get a description — ALWAYS returns something useful"""
-        if self.analysis_result:
-            return f"Sir, {self.analysis_result}"
+        with self._lock:
+            analysis_result = self.analysis_result
+            detected_faces = self.detected_faces
+            stable_emotion = self.stable_emotion
+            detected_objects = list(self.detected_objects)
+            current_frame = self.current_frame
+
+        if analysis_result:
+            return f"Sir, {analysis_result}"
 
         parts = []
-        if self.detected_faces > 0:
-            parts.append(f"I can see {self.detected_faces} person")
-            if self.stable_emotion not in ['unknown', '']:
-                parts.append(f"who appears {self.stable_emotion}")
-        if self.detected_objects:
-            obj_names = list(set(o['name'] for o in self.detected_objects))
+        if detected_faces > 0:
+            parts.append(f"I can see {detected_faces} person")
+            if stable_emotion not in ['unknown', '']:
+                parts.append(f"who appears {stable_emotion}")
+        if detected_objects:
+            obj_names = list(set(o['name'] for o in detected_objects))
             parts.append(f"I also see: {', '.join(obj_names[:5])}")
 
         if parts:
@@ -276,28 +306,34 @@ class CameraVision:
         if not CV2_AVAILABLE:
             return "Sir, camera library is not installed. Please run: pip install opencv-python"
 
-        if self.current_frame is None:
+        if current_frame is None:
             return "Sir, camera is starting up. Please wait a moment."
 
         return "Sir, I can see through the camera. No faces or objects detected clearly right now."
 
     def get_emotion(self) -> str:
-        return self.stable_emotion
+        with self._lock:
+            return self.stable_emotion
 
     def get_objects(self) -> List[Dict]:
-        return self.detected_objects
+        with self._lock:
+            return list(self.detected_objects)
 
     def is_person_present(self) -> bool:
-        return self.detected_faces > 0
+        with self._lock:
+            return self.detected_faces > 0
 
     def get_frame(self):
-        return self.current_frame
+        with self._lock:
+            return self.current_frame
 
     def capture_photo(self, save_path: str = None) -> str:
-        if self.current_frame is None:
+        with self._lock:
+            frame = self.current_frame
+        if frame is None:
             return "Sir, no camera frame available."
         if save_path and CV2_AVAILABLE:
-            cv2.imwrite(save_path, self.current_frame)
+            cv2.imwrite(save_path, frame)
             return f"Sir, photo saved to {save_path}"
         return "Sir, photo captured."
 

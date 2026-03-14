@@ -4,6 +4,13 @@ NO API KEYS NEEDED - STARK has its own brain
 """
 
 import os
+import shutil
+
+try:
+    from dotenv import load_dotenv
+    load_dotenv()
+except ImportError:
+    pass
 
 # ============================================
 # USER PROFILE
@@ -12,17 +19,15 @@ USER_NAME = "Sir"
 ASSISTANT_NAME = "STARK"
 
 # ============================================
-# CONTACTS
+# CONTACTS - loaded from environment variables
 # ============================================
 CONTACTS = {
-    "mummy": "+918309351685",
-    "mom": "+918309351685",
-    "mother": "+918309351685",
-    "whatsapp": "+918309351685",
-    # Add more contacts here
-    "dad": "+91XXXXXXXXXX",
-    "father": "+91XXXXXXXXXX",
-    "friend": "+91XXXXXXXXXX",
+    "mummy": os.getenv("CONTACT_MUMMY", ""),
+    "mom": os.getenv("CONTACT_MUMMY", ""),
+    "mother": os.getenv("CONTACT_MUMMY", ""),
+    "dad": os.getenv("CONTACT_DAD", ""),
+    "father": os.getenv("CONTACT_DAD", ""),
+    "friend": os.getenv("CONTACT_FRIEND", ""),
 }
 
 # ============================================
@@ -32,8 +37,8 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 MEMORY_FILE = os.path.join(BASE_DIR, "stark_memory.json")
 KNOWLEDGE_FILE = os.path.join(BASE_DIR, "knowledge_base.json")
 
-# Tesseract OCR path (for screen reading)
-TESSERACT_PATH = r"C:\Program Files\Tesseract-OCR\tesseract.exe"
+# Tesseract OCR path (for screen reading) — auto-detect or fall back to Windows default
+TESSERACT_PATH = shutil.which("tesseract") or r"C:\Program Files\Tesseract-OCR\tesseract.exe"
 
 # ============================================
 # BRAIN SETTINGS
@@ -100,5 +105,6 @@ WATER_REMINDER_INTERVAL = 3600  # 60 minutes in seconds
 # GEMINI API (OPTIONAL - Only if you want to use)
 # ============================================
 # Leave empty to use STARK's built-in brain
-GEMINI_API_KEY = ""  # Put your Gemini API key here if you want to use Gemini AI
-OPENAI_API_KEY = ""  # Put your OpenAI API key here if you want to use GPT
+# Set these in your .env file (see .env.example)
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", "")
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY", "")

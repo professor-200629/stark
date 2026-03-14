@@ -30,6 +30,7 @@ ultralytics>=8.0.0
 
 # ============ SYSTEM UTILITIES ============
 psutil>=5.9.0
+python-dotenv>=1.0.0
 
 # ============ MESSAGING ============
 pywhatkit>=5.4
