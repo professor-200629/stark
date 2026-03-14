@@ -1,0 +1,476 @@
+{
+  "user_profile": {
+    "name": "Sir",
+    "preferences": {},
+    "habits": {},
+    "goals": []
+  },
+  "conversations": [
+    {
+      "user": "youtube play animal trailer in telugu",
+      "stark": "Sir, searched for 'animal trailer in telugu' on YouTube.",
+      "time": "2026-03-14T11:32:53.736127"
+    },
+    {
+      "user": "play animal trailer in telugu on youtube",
+      "stark": "Sir, searched for 'animal trailer in telugu on youtube' on YouTube.",
+      "time": "2026-03-14T11:33:18.623923"
+    },
+    {
+      "user": "songs",
+      "stark": "I understand, Sir. Is there anything specific you'd like me to help with?",
+      "time": "2026-03-14T11:34:30.642507"
+    },
+    {
+      "user": "play telugu songs",
+      "stark": "Sir, searched for 'telugu songs' on YouTube.",
+      "time": "2026-03-14T11:34:45.452087"
+    },
+    {
+      "user": "play telugu songs on spotify",
+      "stark": "Sir, searched for 'telugu songs on spotify' on YouTube.",
+      "time": "2026-03-14T11:35:04.853460"
+    },
+    {
+      "user": "amazon",
+      "stark": "Got it, Sir. Let me know if you need assistance with anything.",
+      "time": "2026-03-14T11:35:33.939805"
+    },
+    {
+      "user": "play animal trailer in telugu",
+      "stark": "Sir, searched for 'animal trailer in telugu' on YouTube.",
+      "time": "2026-03-14T11:46:22.180288"
+    },
+    {
+      "user": "stark",
+      "stark": "Understood, Sir. I'm here whenever you need me.",
+      "time": "2026-03-14T11:47:01.114697"
+    },
+    {
+      "user": "i'll call you later",
+      "stark": "I'm listening, Sir. What would you like to do next?",
+      "time": "2026-03-14T11:47:36.744067"
+    },
+    {
+      "user": "read the screen",
+      "stark": "Sir, I can see content on your screen with 39 lines and 157 words. Would you like me to summarize it or look for something specific?",
+      "time": "2026-03-14T11:48:34.428329"
+    },
+    {
+      "user": "summarise it",
+      "stark": "Got it, Sir. Let me know if you need assistance with anything.",
+      "time": "2026-03-14T11:48:48.001439"
+    },
+    {
+      "user": "stark",
+      "stark": "I understand, Sir. Is there anything specific you'd like me to help with?",
+      "time": "2026-03-14T11:49:51.072451"
+    },
+    {
+      "user": "how are you stark",
+      "stark": "Good question, Sir! I'm thinking about the best way to help you with this.",
+      "time": "2026-03-14T11:56:25.657630"
+    },
+    {
+      "user": "open youtube play animal trailer in telugu",
+      "stark": "Sir, YouTube is open.",
+      "time": "2026-03-14T11:57:45.228853"
+    },
+    {
+      "user": "set timer for 45 seconds",
+      "stark": "I'm listening, Sir. What would you like to do next?",
+      "time": "2026-03-14T11:59:07.938197"
+    },
+    {
+      "user": "open amazon",
+      "stark": "Sir, opening amazon",
+      "time": "2026-03-14T11:59:26.069448"
+    },
+    {
+      "user": "shark motivate me",
+      "stark": "Success is not final, failure is not fatal. It is the courage to continue that counts Sir.",
+      "time": "2026-03-14T12:00:20.832225"
+    },
+    {
+      "user": "stark can you talk for sometime",
+      "stark": "I'm listening, Sir. What would you like to do next?",
+      "time": "2026-03-14T12:00:33.796196"
+    },
+    {
+      "user": "what is python",
+      "stark": "Python is a high-level, interpreted programming language known for its simplicity and readability. It was created by Guido van Rossum in 1991. Python supports multiple programming paradigms including ",
+      "time": "2026-03-14T12:01:04.661786"
+    },
+    {
+      "user": "generate calculator code",
+      "stark": "Sir, here's the code you requested:\n\n# Simple Calculator\ndef calculator():\n    print(\"=== STARK Calculator ===\")\n    print(\"Operations: +, -, *, /\")\n    \n    while True:\n        try:\n            num1 ",
+      "time": "2026-03-14T12:02:43.813284"
+    },
+    {
+      "user": "stark read the screen",
+      "stark": "Sir, I can see content on your screen with 52 lines and 133 words. Would you like me to summarize it or look for something specific?",
+      "time": "2026-03-14T12:03:10.788032"
+    },
+    {
+      "user": "summarise it",
+      "stark": "I understand, Sir. Is there anything specific you'd like me to help with?",
+      "time": "2026-03-14T12:03:32.073198"
+    },
+    {
+      "user": "what do you see in camera",
+      "stark": "Sir, I notice: person.",
+      "time": "2026-03-14T12:03:41.359202"
+    },
+    {
+      "user": "starcom suffering from hair fall",
+      "stark": "Understood, Sir. I'm here whenever you need me.",
+      "time": "2026-03-14T12:04:29.077805"
+    },
+    {
+      "user": "stark i am suffering from hair fall how to reduce hair fall",
+      "stark": "That's an interesting question, Sir. Let me help you find information about that.",
+      "time": "2026-03-14T12:04:49.695450"
+    },
+    {
+      "user": "hello stark",
+      "stark": "Hi Sir! I'm here and ready to help.",
+      "time": "2026-03-14T14:31:18.975476"
+    },
+    {
+      "user": "open youtube play animal trailer in telugu",
+      "stark": "Sir, playing 'animal trailer in telugu' on YouTube.",
+      "time": "2026-03-14T14:31:40.290200"
+    },
+    {
+      "user": "close the youtube",
+      "stark": "Sir, attempted to close the youtube",
+      "time": "2026-03-14T14:32:02.204116"
+    },
+    {
+      "user": "how are you stark",
+      "stark": "All systems running perfectly, Sir! I'm here for you.",
+      "time": "2026-03-14T14:32:24.512070"
+    },
+    {
+      "user": "read the screen",
+      "stark": "Sir, I can see content on your screen. Here's what it says: BB Windows Powershell\n\n[Listener] Background listening started.\n[Listener] > ‘hello stark'\n\n[You]: hello stark\n[STARK]: Hi Sir! I'm here and",
+      "time": "2026-03-14T14:33:35.391581"
+    },
+    {
+      "user": "hello stark",
+      "stark": "Hi Sir! I'm here and ready to help.",
+      "time": "2026-03-14T14:34:22.660598"
+    },
+    {
+      "user": "read the screen",
+      "stark": "Sir, I can see content on your screen. Here's what it says: 6\n\nG@ New chat\n\nQ Search chats\n\n@® Images\n\n88 Apps\n\n© Codex\n\nE Projects\n\nGPTs >\n\nGroup chats >\n\nYour chats\n\nPython File Error Fix\n\nCheck fil",
+      "time": "2026-03-14T14:36:03.549777"
+    },
+    {
+      "user": "read the screen where i have highlighted the matter",
+      "stark": "Hello Sir! How can I assist you?",
+      "time": "2026-03-14T14:36:34.884558"
+    },
+    {
+      "user": "hello stark",
+      "stark": "Hello Sir! How can I assist you?",
+      "time": "2026-03-14T14:38:08.147606"
+    },
+    {
+      "user": "generate a calculator code",
+      "stark": "Sir, here's the code you requested:\n\n# Simple Calculator\ndef calculator():\n    print(\"=== STARK Calculator ===\")\n    print(\"Operations: +, -, *, /\")\n    \n    while True:\n        try:\n            num1 ",
+      "time": "2026-03-14T14:39:48.200696"
+    },
+    {
+      "user": "open spotify play telugu songs",
+      "stark": "Sir, playing 'telugu sgs' on Spotify.",
+      "time": "2026-03-14T14:40:21.966470"
+    },
+    {
+      "user": "send message to mummy hi",
+      "stark": "Hey Sir! What would you like me to do?",
+      "time": "2026-03-14T14:41:15.848777"
+    },
+    {
+      "user": "send message to mummy hi in whatsapp",
+      "stark": "Hi Sir! I'm here and ready to help.",
+      "time": "2026-03-14T14:41:30.194893"
+    },
+    {
+      "user": "close spotify",
+      "stark": "Sir, Spotify is opening.",
+      "time": "2026-03-14T14:42:03.178509"
+    },
+    {
+      "user": "what time is it",
+      "stark": "Sir, it's 02:42 PM.",
+      "time": "2026-03-14T14:42:23.795689"
+    },
+    {
+      "user": "open the screen",
+      "stark": "Sir, opening the screen",
+      "time": "2026-03-14T14:43:07.819189"
+    },
+    {
+      "user": "set timer for 45 seconds",
+      "stark": "Sir, timer set for 45 seconds.",
+      "time": "2026-03-14T14:43:29.098545"
+    },
+    {
+      "user": "set alarm for 3:00 p.m. today",
+      "stark": "Sir, timer set for 3 seconds.",
+      "time": "2026-03-14T14:44:34.697137"
+    },
+    {
+      "user": "open amazon",
+      "stark": "Sir, opening amazon",
+      "time": "2026-03-14T14:45:22.546916"
+    },
+    {
+      "user": "close the amazon",
+      "stark": "Sir, attempted to close the amazon",
+      "time": "2026-03-14T14:45:35.794864"
+    },
+    {
+      "user": "open screenshot",
+      "stark": "Sir, opening screenshot",
+      "time": "2026-03-14T14:47:23.642319"
+    },
+    {
+      "user": "which is the best a model to generate codes and to fix the debugs and fix the errors which is the best ai model can you tell me",
+      "stark": "Hey Sir! What would you like me to do?",
+      "time": "2026-03-14T14:48:10.147802"
+    },
+    {
+      "user": "i am suffering from hair fall can you tell me how to reduce hair fall",
+      "stark": "Sir, to reduce hair fall: 1) Oil your hair regularly with coconut or castor oil. 2) Eat protein-rich foods (eggs, nuts, fish). 3) Avoid hot water on hair. 4) Reduce stress. 5) Take biotin and iron sup",
+      "time": "2026-03-14T14:49:26.753275"
+    },
+    {
+      "user": "read my screen and summarise all",
+      "stark": "Hi Sir! What can I do for you?",
+      "time": "2026-03-14T14:51:04.546189"
+    },
+    {
+      "user": "do you know anything about gemini live challenge agent",
+      "stark": "Hey Sir! What would you like me to do?",
+      "time": "2026-03-14T14:51:32.713139"
+    },
+    {
+      "user": "what is this object c camera",
+      "stark": "Hello Sir! How can I assist you?",
+      "time": "2026-03-14T14:53:01.264769"
+    },
+    {
+      "user": "hello stark",
+      "stark": "Hey Sir! Ready to assist.",
+      "time": "2026-03-14T19:45:16.793462"
+    },
+    {
+      "user": "open youtube play animal trailer in telugu",
+      "stark": "Sir, playing 'animal trailer in telugu' on YouTube.",
+      "time": "2026-03-14T19:45:39.685977"
+    },
+    {
+      "user": "what is this object",
+      "stark": "Hello Sir!",
+      "time": "2026-03-14T19:46:48.874175"
+    },
+    {
+      "user": "identify this object",
+      "stark": "Hello Sir!",
+      "time": "2026-03-14T19:47:03.123790"
+    },
+    {
+      "user": "increase the volume",
+      "stark": "I understand, Sir. Is there anything specific you'd like me to help with?",
+      "time": "2026-03-14T19:47:52.143221"
+    },
+    {
+      "user": "decrease the volume",
+      "stark": "I understand, Sir. Is there anything specific you'd like me to help with?",
+      "time": "2026-03-14T19:48:06.513675"
+    },
+    {
+      "user": "send message to mummy say hi in whatsapp",
+      "stark": "Hey Sir! Ready to assist.",
+      "time": "2026-03-14T19:48:20.521101"
+    },
+    {
+      "user": "search who is the founder of apple",
+      "stark": "Sir, I understand your question. Based on what I know, I'd need a bit more detail to answer accurately. What specifically would you like to know?",
+      "time": "2026-03-14T19:50:02.168429"
+    },
+    {
+      "user": "what's my screen how many types are open now",
+      "stark": "Sir, I understand your question. Based on what I know, I'd need a bit more detail to answer accurately. What specifically would you like to know?",
+      "time": "2026-03-14T19:50:43.776383"
+    },
+    {
+      "user": "who is the founder of apple",
+      "stark": "Good question, Sir. I have some information on this topic. Could you be more specific about what aspect you're interested in?",
+      "time": "2026-03-14T19:51:00.506669"
+    },
+    {
+      "user": "tell me the who is the founder of apple tell his name",
+      "stark": "Hello Sir!",
+      "time": "2026-03-14T19:51:12.259063"
+    },
+    {
+      "user": "how to prepare mutton biryani",
+      "stark": "Good question, Sir. I have some information on this topic. Could you be more specific about what aspect you're interested in?",
+      "time": "2026-03-14T19:51:28.784656"
+    },
+    {
+      "user": "how to install olama",
+      "stark": "Sir, that's a great question. Let me think about that. Could you provide more context so I can give you a better answer?",
+      "time": "2026-03-14T19:51:52.597041"
+    },
+    {
+      "user": "read the text",
+      "stark": "Understood, Sir. I'm here whenever you need me.",
+      "time": "2026-03-14T19:52:20.913891"
+    },
+    {
+      "user": "what's my screen and read the text",
+      "stark": "Sir, that's a great question. Let me think about that. Could you provide more context so I can give you a better answer?",
+      "time": "2026-03-14T19:52:38.213330"
+    },
+    {
+      "user": "hello stark",
+      "stark": "Hey Sir! Ready to assist.",
+      "time": "2026-03-14T20:21:50.800642"
+    },
+    {
+      "user": "how to prepare mutton biryani",
+      "stark": "Sir, that's a great question. Let me think about that. Could you provide more context so I can give you a better answer?",
+      "time": "2026-03-14T21:20:30.305616"
+    },
+    {
+      "user": "increase the volume",
+      "stark": "Understood, Sir. I'm here whenever you need me.",
+      "time": "2026-03-14T21:21:36.996286"
+    },
+    {
+      "user": "close youtube",
+      "stark": "Sir, I'm listening. What would you like to do next?",
+      "time": "2026-03-14T21:40:43.218319"
+    },
+    {
+      "user": "what time is it",
+      "stark": "Sir, the current time is 09:41 PM.",
+      "time": "2026-03-14T21:41:11.454099"
+    },
+    {
+      "user": "how to prepare mutton biryani",
+      "stark": "Good question, Sir. I have some information on this topic. Could you be more specific about what aspect you're interested in?",
+      "time": "2026-03-14T21:44:52.317490"
+    },
+    {
+      "user": "increase the volume",
+      "stark": "Sir, I'm listening. What would you like to do next?",
+      "time": "2026-03-14T21:55:03.256720"
+    },
+    {
+      "user": "who is the founder of apple",
+      "stark": "Sir, that's a great question. Let me think about that. Could you provide more context so I can give you a better answer?",
+      "time": "2026-03-14T21:55:25.491939"
+    },
+    {
+      "user": "start scroll down the page",
+      "stark": "Sir, I'm listening. What would you like to do next?",
+      "time": "2026-03-14T21:58:07.456148"
+    },
+    {
+      "user": "how to prepare mutton biryani",
+      "stark": "Good question, Sir. I have some information on this topic. Could you be more specific about what aspect you're interested in?",
+      "time": "2026-03-14T21:58:42.802919"
+    },
+    {
+      "user": "sargam suffering from hair fall to reduce hair fall what products i want to use only use products are organic tell me what products i want to use",
+      "stark": "Sir, reduce hair fall: oil regularly, eat protein, avoid hot water, reduce stress, take biotin.",
+      "time": "2026-03-14T22:05:18.100094"
+    },
+    {
+      "user": "what products i want to use to reduce hair fall",
+      "stark": "Sir, reduce hair fall: oil regularly, eat protein, avoid hot water, reduce stress, take biotin.",
+      "time": "2026-03-14T22:05:38.665356"
+    },
+    {
+      "user": "i am suffering from headache",
+      "stark": "Sir, for headache: drink water, rest in dark room, cold compress, massage temples, take screen breaks.",
+      "time": "2026-03-14T22:05:55.456416"
+    },
+    {
+      "user": "can you tell me how to install olama in my device by step by step guide",
+      "stark": "Sir, I understand your question. Based on what I know, I'd need a bit more detail to answer accurately. What specifically would you like to know?",
+      "time": "2026-03-14T22:06:20.107693"
+    }
+  ],
+  "reminders": [],
+  "notes": [],
+  "learned_facts": {},
+  "work_sessions": [
+    {
+      "start": "2026-03-14T11:30:52.231517",
+      "end": null,
+      "duration_minutes": null
+    },
+    {
+      "start": "2026-03-14T11:44:43.438870",
+      "end": null,
+      "duration_minutes": null
+    },
+    {
+      "start": "2026-03-14T11:56:01.293165",
+      "end": null,
+      "duration_minutes": null
+    },
+    {
+      "start": "2026-03-14T14:31:04.235543",
+      "end": null,
+      "duration_minutes": null
+    },
+    {
+      "start": "2026-03-14T18:13:28.419212"
+    },
+    {
+      "start": "2026-03-14T19:45:06.971666",
+      "end": null,
+      "duration_minutes": null
+    },
+    {
+      "start": "2026-03-14T20:21:41.057771",
+      "end": null,
+      "duration_minutes": null
+    },
+    {
+      "start": "2026-03-14T21:18:54.718064",
+      "end": null,
+      "duration_minutes": null
+    },
+    {
+      "start": "2026-03-14T21:39:52.047551",
+      "end": null,
+      "duration_minutes": null
+    },
+    {
+      "start": "2026-03-14T21:52:49.700328",
+      "end": null,
+      "duration_minutes": null
+    }
+  ],
+  "mood_history": [],
+  "important_dates": [],
+  "contacts": {
+    "mummy": "+918309351685",
+    "mom": "+918309351685",
+    "mother": "+918309351685",
+    "whatsapp": "+918309351685",
+    "dad": "+91XXXXXXXXXX",
+    "father": "+91XXXXXXXXXX",
+    "friend": "+91XXXXXXXXXX"
+  },
+  "created_at": "2026-03-14T11:30:41.241331",
+  "last_updated": "2026-03-14T22:06:20.107693"
+}

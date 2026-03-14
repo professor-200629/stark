@@ -1,0 +1,122 @@
+{
+  "user_name": "Sir",
+  "preferences": {},
+  "habits": {},
+  "health": {},
+  "schedule": [],
+  "contacts": {
+    "mummy": "+918309351685"
+  },
+  "conversation_history": [
+    {
+      "user": "hello stark",
+      "stark": "Hello Sir! How can I help you today?",
+      "time": "2026-03-12T17:53:53.100957"
+    },
+    {
+      "user": "hello",
+      "stark": "Hello Sir! How can I help you today?",
+      "time": "2026-03-12T17:54:37.533085"
+    },
+    {
+      "user": "telugu",
+      "stark": "I understand Sir. Is there anything specific you'd like me to help with?",
+      "time": "2026-03-12T17:55:01.695665"
+    },
+    {
+      "user": "open youtube play animal trailer in telugu",
+      "stark": "Sir, YouTube is open.",
+      "time": "2026-03-12T17:57:07.132637"
+    },
+    {
+      "user": "close the youtube",
+      "stark": "Sir, closed the youtube.",
+      "time": "2026-03-12T17:57:37.125894"
+    },
+    {
+      "user": "increase the volume",
+      "stark": "Got it Sir. I'm here whenever you need me.",
+      "time": "2026-03-12T17:58:22.255828"
+    },
+    {
+      "user": "increase the brightness",
+      "stark": "Alright Sir. Let me know if you need anything.",
+      "time": "2026-03-12T17:58:37.762333"
+    },
+    {
+      "user": "what's my screen and read the text",
+      "stark": "Sir, I can see text on your screen with about 204 words. Would you like me to read it or analyze it?",
+      "time": "2026-03-12T17:59:18.218824"
+    },
+    {
+      "user": "read it",
+      "stark": "Got it Sir. I'm here whenever you need me.",
+      "time": "2026-03-12T17:59:35.819834"
+    },
+    {
+      "user": "what's my current location",
+      "stark": "Sir, I'm still learning about this particular topic. Would you like me to search online?",
+      "time": "2026-03-12T18:02:11.664646"
+    },
+    {
+      "user": "45 seconds",
+      "stark": "I understand Sir. Is there anything specific you'd like me to help with?",
+      "time": "2026-03-12T18:02:33.587015"
+    },
+    {
+      "user": "what is this object",
+      "stark": "Hi Sir! What can I do for you?",
+      "time": "2026-03-12T18:03:11.680455"
+    },
+    {
+      "user": "open camera and see this object and tell me what is this",
+      "stark": "Sir, opening camera and see this object and tell me what is this.",
+      "time": "2026-03-12T18:03:33.840084"
+    },
+    {
+      "user": "play telugu songs",
+      "stark": "Sir, searched for 'telugu songs'.",
+      "time": "2026-03-12T18:04:08.162947"
+    },
+    {
+      "user": "open spotify play telugu songs",
+      "stark": "Sir, searched for 'open spotify  telugu songs'.",
+      "time": "2026-03-12T18:04:42.150552"
+    },
+    {
+      "user": "open google",
+      "stark": "Sir, opening google.",
+      "time": "2026-03-12T18:06:18.425920"
+    },
+    {
+      "user": "open amazon",
+      "stark": "Sir, opening amazon.",
+      "time": "2026-03-12T18:07:37.482923"
+    },
+    {
+      "user": "hello stark",
+      "stark": "Hello Sir! How can I help you today?",
+      "time": "2026-03-12T23:16:15.891345"
+    },
+    {
+      "user": "open youtube play animal trailer in telugu",
+      "stark": "Sir, YouTube is open.",
+      "time": "2026-03-12T23:16:55.382993"
+    }
+  ],
+  "learned_facts": [],
+  "reminders": [],
+  "mood_history": [],
+  "work_sessions": [
+    {
+      "start": "2026-03-12T17:53:27.011144",
+      "end": null
+    },
+    {
+      "start": "2026-03-12T23:15:52.831317",
+      "end": null
+    }
+  ],
+  "notes": [],
+  "learned_responses": {}
+}

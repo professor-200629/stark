@@ -1,0 +1,65 @@
+{
+  "greetings": {
+    "hello": "Hello Sir! How can I help you?",
+    "hi": "Hi Sir! Ready to assist.",
+    "hey": "Hey Sir! What can I do for you?",
+    "good morning": "Good morning Sir! Ready to start your day?",
+    "good afternoon": "Good afternoon Sir! How can I help?",
+    "good evening": "Good evening Sir! What would you like to do?",
+    "good night": "Good night Sir! Sleep well!",
+    "how are you": "I'm doing great Sir! Always ready to help.",
+    "what's up": "All systems perfect Sir! What can I do for you?"
+  },
+  "about": {
+    "who are you": "I'm STARK, your personal AI assistant. I'm here to help you with anything you need, Sir.",
+    "what are you": "I'm STARK, a voice-controlled AI assistant designed to help you with tasks, answer questions, control your computer, and much more.",
+    "your name": "My name is STARK, Sir. I'm your personal AI assistant.",
+    "who made you": "I was created to serve you, Sir. I'm STARK, your dedicated AI assistant.",
+    "what can you do": "I can read your screen, watch through camera, control YouTube, Spotify, Netflix, send WhatsApp messages, help in meetings, write code, set reminders, and much more, Sir!"
+  },
+  "health_tips": [
+    "Drink at least 8 glasses of water daily, Sir.",
+    "Take breaks every 45 minutes while working, Sir.",
+    "Get 7-8 hours of sleep for optimal performance, Sir.",
+    "Exercise for 30 minutes daily, Sir.",
+    "Eat more fruits and vegetables, Sir.",
+    "Reduce screen time before bed for better sleep, Sir.",
+    "Practice deep breathing when stressed, Sir.",
+    "Maintain good posture while working, Sir."
+  ],
+  "motivation": [
+    "You're capable of amazing things, Sir. Keep pushing forward!",
+    "Every challenge is an opportunity to grow, Sir.",
+    "Success comes from consistent effort, Sir. You've got this!",
+    "Believe in yourself, Sir. You're stronger than you think.",
+    "The only limit is your mind, Sir. Dream big!",
+    "Hard work always pays off, Sir. Stay focused!",
+    "You've overcome so much already, Sir. Keep going!",
+    "Your potential is unlimited, Sir. Make it happen!"
+  ],
+  "subjects": {
+    "python": "Python is a versatile programming language known for its readability. It's used for web development, data science, AI, automation, and more.",
+    "javascript": "JavaScript is the language of the web. It runs in browsers and on servers (Node.js).",
+    "html": "HTML structures web content using tags like <div>, <p>, <h1>.",
+    "css": "CSS styles HTML elements with colors, fonts, and layouts.",
+    "sql": "SQL manages databases with commands: SELECT, INSERT, UPDATE, DELETE.",
+    "api": "API lets software communicate using HTTP methods: GET, POST, PUT, DELETE.",
+    "machine learning": "Machine Learning is AI that learns from data. Types: supervised, unsupervised, reinforcement."
+  },
+  "code_templates": {
+    "hello world": "print('Hello, World!')",
+    "for loop": "for i in range(10):\n    print(i)",
+    "function": "def my_function(param):\n    return param * 2",
+    "class": "class MyClass:\n    def __init__(self, value):\n        self.value = value"
+  },
+  "error_help": {
+    "indentationerror": "IndentationError: Python uses indentation for blocks. Use 4 spaces per level.",
+    "nameerror": "NameError: Variable or function not defined. Check spelling.",
+    "typeerror": "TypeError: Operation on incompatible types. Check data types.",
+    "syntaxerror": "SyntaxError: Invalid syntax. Check for missing colons or brackets.",
+    "filenotfounderror": "FileNotFoundError: File doesn't exist. Check the path.",
+    "indexerror": "IndexError: List index out of range.",
+    "keyerror": "KeyError: Dictionary key not found."
+  },
+  "learned": {}
+}

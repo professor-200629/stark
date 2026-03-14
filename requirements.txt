@@ -1,0 +1,41 @@
+# STARK AI Assistant - Required Packages
+# Install with: pip install -r requirements.txt
+#
+# WINDOWS USERS - PyAudio fix:
+#     pip install pipwin
+#     pipwin install pyaudio
+# OR: pip install pyaudio --find-links https://github.com/s0d0ma/audio/releases
+
+# ============ CORE ============
+pyttsx3>=2.90
+SpeechRecognition>=3.10.0
+pyaudio>=0.2.13
+
+# ============ GUI AUTOMATION ============
+pyautogui>=0.9.54
+pyperclip>=1.8.2
+Pillow>=10.0.0
+
+# ============ SCREEN CAPTURE & OCR ============
+mss>=9.0.1
+pytesseract>=0.3.10
+
+# ============ COMPUTER VISION ============
+opencv-python>=4.8.0
+numpy>=1.24.0
+
+# ============ AI & FACE ANALYSIS ============
+deepface>=0.0.90
+ultralytics>=8.0.0
+
+# ============ SYSTEM UTILITIES ============
+psutil>=5.9.0
+
+# ============ MESSAGING ============
+pywhatkit>=5.4
+
+# ============ WEB ============
+requests>=2.31.0
+
+# ============ OPTIONAL: SCREEN BRIGHTNESS ============
+screen-brightness-control>=0.23.0
