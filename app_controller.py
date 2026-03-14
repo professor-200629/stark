@@ -20,7 +20,7 @@ except ImportError:
 
 import sys
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from .utils import safe_type as _safe_type
+from utils import safe_type as _safe_type
 
 
 class AppController:

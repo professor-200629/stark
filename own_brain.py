@@ -8,7 +8,7 @@ import re
 import json
 import os
 from datetime import datetime
-from typing import Optional, Dict, List
+from typing import Optional
 
 try:
     import google.generativeai as genai
@@ -17,7 +17,7 @@ except Exception:
     GEMINI_AVAILABLE = False
 
 import config
-from .knowledge_engine import KnowledgeEngine
+from knowledge_engine import KnowledgeEngine
 
 
 class OwnBrain:
@@ -176,7 +176,7 @@ class OwnBrain:
             return self._generate_code_locally(input_lower)
 
         # ========== EXPLANATIONS ==========
-        if any(w in input_lower for w in ["explain", "teach me", "what is", "tell me about", "how does", "how do"]):
+        if any(w in input_lower for w in ["explain", "teach me", "what is", "tell me about", "how does", "how do", "how to", "who is", "who was", "what are"]):
             return self._explain_topic(input_lower)
 
         # ========== CALCULATIONS ==========
@@ -223,9 +223,9 @@ class OwnBrain:
         topic = topic.strip()
 
         if topic:
-            return (f"Sir, regarding {topic}: I'll do my best to explain. "
-                    f"This topic has multiple aspects. Could you be more specific about what you'd like to know? "
-                    f"I can explain it step by step.")
+            # Provide a more helpful response with web search suggestion
+            return (f"Sir, I don't have specific information about '{topic}' in my local knowledge base. "
+                    f"I can search the web for you — just say 'search {topic}' and I'll look it up on Google.")
         return "Sir, please tell me what topic you'd like me to explain."
 
     def _try_calculate(self, input_lower: str) -> str:
@@ -252,11 +252,15 @@ class OwnBrain:
         question_words = ["what", "how", "why", "when", "where", "who", "which", "can", "could", "would", "should"]
 
         if any(w in input_lower for w in question_words) or input_lower.endswith("?"):
-            responses = [
-                "Sir, that's a great question. Let me think about that. Could you provide more context so I can give you a better answer?",
-                "Sir, I understand your question. Based on what I know, I'd need a bit more detail to answer accurately. What specifically would you like to know?",
-                "Good question, Sir. I have some information on this topic. Could you be more specific about what aspect you're interested in?",
-            ]
+            # Build a concise search query by stripping leading question words
+            topic = input_lower.rstrip("?").strip()
+            for qw in ["what is", "what are", "how to", "how do", "how does", "who is", "who was",
+                       "why is", "why does", "when is", "where is", "which is"]:
+                if topic.startswith(qw + " "):
+                    topic = topic[len(qw):].strip()
+                    break
+            return (f"Sir, I don't have enough local information to answer that confidently. "
+                    f"Say 'search {topic}' and I'll look it up on Google for you right away.")
         else:
             responses = [
                 "I understand, Sir. Is there anything specific you'd like me to help with?",
