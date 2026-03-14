@@ -9,7 +9,7 @@ import random
 import sys
 
 # Add parent directory to path for config import
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import config
 
 
@@ -262,6 +262,18 @@ while True:
         for key, info in subjects.items():
             if key in text_lower:
                 return f"Sir, {info}"
+
+        # Check general knowledge section
+        general = self.knowledge.get('general_knowledge', {})
+        for key, info in general.items():
+            if key in text_lower:
+                return info
+
+        # Check cooking section
+        cooking = self.knowledge.get('cooking', {})
+        for key, info in cooking.items():
+            if key in text_lower:
+                return info
 
         return None
 

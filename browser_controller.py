@@ -15,9 +15,17 @@ except ImportError:
 
 import sys
 import os
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import config
-from .utils import safe_type as _safe_type
+try:
+    from utils import safe_type as _safe_type
+except ImportError:
+    def _safe_type(text):
+        try:
+            import pyautogui
+            pyautogui.typewrite(text, interval=0.05)
+        except Exception:
+            pass
 
 
 class BrowserController:
@@ -197,6 +205,21 @@ class BrowserController:
         return "Sir, mute toggled."
 
     # ========== GENERAL BROWSER ==========
+
+    def open_website(self, url: str) -> str:
+        """Open any website by URL"""
+        if not url.startswith("http"):
+            url = f"https://{url}"
+        webbrowser.open(url)
+        self.current_site = url
+        return f"Sir, opened {url}"
+
+    def google_search(self, query: str) -> str:
+        """Search Google for a query"""
+        url = f"https://www.google.com/search?q={query.replace(' ', '+')}"
+        webbrowser.open(url)
+        self.current_site = "google"
+        return f"Sir, searching Google for '{query}'."
 
     def open_url(self, url: str) -> str:
         if not url.startswith('http'):
