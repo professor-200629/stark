@@ -15,19 +15,19 @@ from datetime import datetime
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 import config
-from stark_brain.voice_engine import VoiceEngine
-from stark_brain.listener import VoiceListener, KeyboardListener
-from stark_brain.own_brain import OwnBrain
-from stark_brain.code_brain import CodeBrain
-from stark_brain.screen_monitor import ScreenMonitor
-from stark_brain.camera_vision import CameraVision
-from stark_brain.code_editor import CodeEditor
-from stark_brain.file_explorer import FileExplorer
-from stark_brain.browser_controller import BrowserController
-from stark_brain.app_controller import AppController
-from stark_brain.communication import CommunicationManager
-from stark_brain.meeting_assistant import MeetingAssistant
-from stark_brain.memory_manager import MemoryManager
+from voice_engine import VoiceEngine
+from listener import VoiceListener, KeyboardListener
+from own_brain import OwnBrain
+from code_brain import CodeBrain
+from screen_monitor import ScreenMonitor
+from camera_vision import CameraVision
+from code_editor import CodeEditor
+from file_explorer import FileExplorer
+from browser_controller import BrowserController
+from app_controller import AppController
+from communication import CommunicationManager
+from meeting_assistant import MeetingAssistant
+from memory_manager import MemoryManager
 
 
 class STARK:
@@ -215,24 +215,69 @@ class STARK:
             self._speak(random.choice(["Yes Sir!", "At your service, Sir!", "Hello Sir! What can I do for you?"]))
             return
 
-        # 3. COMMUNICATION (WHATSAPP, TELEGRAM, CALLS)
-        if "whatsapp" in cmd or "message" in cmd or "call" in cmd:
+        # 3. CLOSE / QUIT COMMANDS - Must come BEFORE communication/media handlers
+        if any(w in cmd for w in ["close", "quit", "exit", "stop"]) and not cmd.startswith("don't"):
+            if "whatsapp" in cmd:
+                self._speak("Closing WhatsApp, Sir.")
+                self.app_ctrl.close_app("whatsapp")
+                return
+            if "youtube" in cmd or "video" in cmd:
+                self._speak("Closing YouTube, Sir.")
+                self.browser.close_tab()
+                return
+            if "spotify" in cmd or "music" in cmd:
+                self._speak("Closing Spotify, Sir.")
+                self.browser.close_tab()
+                return
+            if "browser" in cmd or "chrome" in cmd or "edge" in cmd:
+                self._speak("Closing the browser, Sir.")
+                self.browser.close_browser()
+                return
+            if "tab" in cmd:
+                self._speak("Closing the current tab, Sir.")
+                self.browser.close_tab()
+                return
+
+        # SYSTEM CONTROLS - Scroll, Volume, Brightness
+        if "scroll" in cmd:
+            try:
+                import pyautogui as _pag
+                if "up" in cmd:
+                    _pag.scroll(5)
+                    self._speak("Scrolling up, Sir.")
+                elif "down" in cmd:
+                    _pag.scroll(-5)
+                    self._speak("Scrolling down, Sir.")
+            except Exception:
+                self._speak("Sir, scroll control not available.")
+            return
+
+        # 4. COMMUNICATION (WHATSAPP, TELEGRAM, CALLS)
+        if ("whatsapp" in cmd or "message" in cmd or "call" in cmd) and not any(
+                w in cmd for w in ["close", "quit", "exit", "stop"]):
+            # Determine intent: "send message" takes priority over "call"
+            is_send_message = any(w in cmd for w in ["send message", "send a message", "message to", "text to"]) or \
+                              (" tell " in f" {cmd} ")
+            is_call = cmd.startswith("call") or "make a call" in cmd or "call to" in cmd
+            if is_send_message:
+                is_call = False
+
             # Handle Mummy messages/calls first
             if "mummy" in cmd or "mom" in cmd or "mother" in cmd:
-                msg = self._extract_message(cmd)
-                if "call" in cmd:
+                if is_call:
                     self._speak("Calling Mummy on WhatsApp, Sir.")
                     self.comms.make_whatsapp_call_to_mummy()
                 else:
+                    msg = self._extract_message(cmd)
                     self._speak(f"Sending message to Mummy: '{msg}'")
                     self.comms.send_whatsapp_message_to_mummy(msg)
                 return
-            
+
             # General message/call logic for other contacts
             contact = self._extract_contact(cmd)
             if contact:
                 msg = self._extract_message(cmd)
-                if "call" in cmd:
+                if is_call:
                     self._speak(f"Calling {contact}, Sir.")
                     self.comms.make_whatsapp_call(contact)
                 else:
@@ -328,7 +373,7 @@ class STARK:
             self.browser.youtube_previous()
             return
 
-        # CLOSE / QUIT COMMANDS for apps and websites
+        # CLOSE / QUIT COMMANDS for apps and websites (media/non-whatsapp)
         if any(w in cmd for w in ["close", "quit", "exit", "stop"]):
             if "youtube" in cmd or "video" in cmd:
                 self._speak("Closing YouTube, Sir.")
@@ -348,54 +393,55 @@ class STARK:
                 return
 
         # SYSTEM CONTROLS - Volume, Brightness, etc.
-        if any(w in cmd for w in ["volume up", "increase volume", "louder"]):
+        if ("volume" in cmd and any(w in cmd for w in ["up", "increase", "louder", "higher", "raise"])) or "louder" in cmd:
             self._speak("Increasing volume, Sir.")
             self.browser.volume_up()
             return
-        
-        if any(w in cmd for w in ["volume down", "decrease volume", "quieter", "lower volume"]):
+
+        if ("volume" in cmd and any(w in cmd for w in ["down", "decrease", "quieter", "lower", "reduce"])) or "quieter" in cmd:
             self._speak("Decreasing volume, Sir.")
             self.browser.volume_down()
             return
-        
+
         if any(w in cmd for w in ["mute", "unmute"]):
             self._speak("Toggling mute, Sir.")
             self.browser.volume_mute()
             return
-        
+
         if "brightness" in cmd:
-            if any(w in cmd for w in ["up", "increase", "higher", "more"]):
-                self._speak("Increasing brightness, Sir.")
-                # Use keyboard shortcut for brightness (if supported)
-                try:
-                    import pyautogui
-                    pyautogui.keyDown('fn')
-                    pyautogui.keyDown('f6')
-                    pyautogui.keyUp('f6')
-                    pyautogui.keyUp('fn')
-                except:
-                    pass
-                return
-            elif any(w in cmd for w in ["down", "decrease", "lower", "less"]):
-                self._speak("Decreasing brightness, Sir.")
-                try:
-                    import pyautogui
-                    pyautogui.keyDown('fn')
-                    pyautogui.keyDown('f5')
-                    pyautogui.keyUp('f5')
-                    pyautogui.keyUp('fn')
-                except:
-                    pass
-                return
-        
+            try:
+                import screen_brightness_control as sbc
+                current = sbc.get_brightness()[0]
+                if any(w in cmd for w in ["up", "increase", "higher", "more"]):
+                    new_brightness = min(100, current + 20)
+                    sbc.set_brightness(new_brightness)
+                    self._speak(f"Brightness increased to {new_brightness}%, Sir.")
+                elif any(w in cmd for w in ["down", "decrease", "lower", "less"]):
+                    new_brightness = max(0, current - 20)
+                    sbc.set_brightness(new_brightness)
+                    self._speak(f"Brightness decreased to {new_brightness}%, Sir.")
+                else:
+                    self._speak(f"Current brightness is {current}%, Sir.")
+            except Exception as e:
+                self._speak(f"Sir, couldn't control brightness: {e}")
+            return
+
         # Screenshot command
         if "screenshot" in cmd or "capture screen" in cmd or "take a picture" in cmd:
             self._speak("Taking a screenshot, Sir.")
             try:
                 import pyautogui
+                timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+                save_path = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                                         f"stark_screenshot_{timestamp}.png")
                 screenshot = pyautogui.screenshot()
-                screenshot.save("stark_screenshot.png")
-                self._speak("Sir, screenshot saved as stark_screenshot.png.")
+                screenshot.save(save_path)
+                self._speak("Sir, screenshot saved. Opening it for you.")
+                if os.name == 'nt':
+                    os.startfile(save_path)
+                else:
+                    import subprocess as _sp
+                    _sp.Popen(['open' if sys.platform == 'darwin' else 'xdg-open', save_path])
             except Exception as e:
                 self._speak(f"Sir, I couldn't take a screenshot: {e}")
             return
@@ -489,11 +535,22 @@ class STARK:
                 return
 
         # WEBSITE OPENING - Handle before file explorer
+        # Handle "open google and search X" specifically
+        if "google" in cmd and "search" in cmd and "open" in cmd:
+            query = cmd.replace("open", "").replace("google", "").replace("search", "").replace("and", "").strip()
+            if query:
+                self._speak(f"Searching Google for '{query}', Sir.")
+                self.browser.google_search(query)
+            else:
+                self._speak("Opening Google, Sir.")
+                self.browser.open_website("google.com")
+            return
+
         website_keywords = {
             "amazon": ("amazon.com", "Amazon"),
             "flipkart": ("flipkart.com", "Flipkart"),
             "google": ("google.com", "Google"),
-            "gmail": ("gmail.com", "Gmail"),
+            "gmail": ("mail.google.com", "Gmail"),
             "facebook": ("facebook.com", "Facebook"),
             "twitter": ("twitter.com", "Twitter"),
             "instagram": ("instagram.com", "Instagram"),
@@ -503,7 +560,7 @@ class STARK:
             "stackoverflow": ("stackoverflow.com", "Stack Overflow"),
             "wikipedia": ("wikipedia.org", "Wikipedia"),
         }
-        
+
         for keyword, (url, name) in website_keywords.items():
             if keyword in cmd and "open" in cmd:
                 self._speak(f"Opening {name} for you, Sir.")
@@ -615,7 +672,13 @@ class STARK:
             text = self.screen.read_screen_now()
             if text:
                 self.last_screen_text = text
-                self._speak(f"Sir, here's what it says: {text[:500]}")
+                if len(text) <= 1000:
+                    self._speak(f"Sir, here's what it says: {text}")
+                else:
+                    self._speak("Sir, there's a lot of text. Let me read it for you.")
+                    chunks = [text[i:i+800] for i in range(0, len(text), 800)]
+                    for chunk in chunks:
+                        self._speak(chunk)
             else:
                 self._speak("Sir, I couldn't find any clear text to read.")
             return
@@ -708,20 +771,42 @@ class STARK:
 
     def _extract_message(self, cmd: str) -> str:
         """Extract message content from command."""
-        # Look for content after "saying", "that", or the contact name
-        separators = ["saying", "that", "to say", "message"]
-        for sep in separators:
+        import re
+
+        # Pattern: "send message to [contact] [actual message] in/on whatsapp"
+        # Try to extract message after the contact name
+        contact_words = ["mummy", "mom", "mother", "dad", "father", "friend",
+                         "brother", "sister", "uncle", "aunty", "boss", "colleague"]
+
+        for contact in contact_words:
+            if contact in cmd:
+                parts = cmd.split(contact, 1)
+                if len(parts) > 1:
+                    msg = parts[1].strip()
+                    # Remove leading connectors
+                    for prefix in ["that ", "saying ", "to say "]:
+                        if msg.lower().startswith(prefix):
+                            msg = msg[len(prefix):].strip()
+                    # Remove trailing platform names and polite words
+                    for suffix in [" in whatsapp", " on whatsapp", " via whatsapp",
+                                   " in telegram", " on telegram", " please", " now"]:
+                        if msg.lower().endswith(suffix):
+                            msg = msg[:-len(suffix)].strip()
+                    if msg:
+                        return msg
+
+        # Fallback: look for "saying", "that", or "to say" separators
+        for sep in ["saying", "to say", "that"]:
             if sep in cmd:
                 parts = cmd.split(sep, 1)
                 if len(parts) > 1:
                     msg = parts[1].strip()
-                    # Remove trailing phrases
-                    for end in [" on whatsapp", " via whatsapp", " please", " now"]:
-                        if msg.endswith(end):
-                            msg = msg[:-len(end)]
-                    return msg
-        
-        # If no separator found, return a default greeting
+                    for suffix in [" on whatsapp", " via whatsapp", " please", " now"]:
+                        if msg.lower().endswith(suffix):
+                            msg = msg[:-len(suffix)].strip()
+                    if msg:
+                        return msg
+
         return "Hello!"
 
     def _handle_timer(self, cmd: str):

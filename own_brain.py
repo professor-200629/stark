@@ -17,7 +17,10 @@ except Exception:
     GEMINI_AVAILABLE = False
 
 import config
-from .knowledge_engine import KnowledgeEngine
+try:
+    from knowledge_engine import KnowledgeEngine
+except ImportError:
+    from .knowledge_engine import KnowledgeEngine
 
 
 class OwnBrain:
@@ -94,8 +97,37 @@ class OwnBrain:
             except Exception as e:
                 print(f"[Brain] Gemini error: {e}")
 
+        # Try web search before local fallback
+        web_answer = self._web_search_answer(user_input)
+        if web_answer:
+            return web_answer
+
         # Use local brain fallback
         return self._local_think(user_input, context)
+
+    def _web_search_answer(self, query: str) -> str:
+        """Search the web for an answer when local knowledge fails"""
+        try:
+            import requests
+            import urllib.parse
+            encoded_query = urllib.parse.quote_plus(query)
+            url = f"https://api.duckduckgo.com/?q={encoded_query}&format=json&no_html=1"
+            response = requests.get(url, timeout=5)
+            data = response.json()
+
+            if data.get('AbstractText'):
+                return f"Sir, {data['AbstractText']}"
+            if data.get('Answer'):
+                return f"Sir, {data['Answer']}"
+
+            if data.get('RelatedTopics') and len(data['RelatedTopics']) > 0:
+                first = data['RelatedTopics'][0]
+                if isinstance(first, dict) and first.get('Text'):
+                    return f"Sir, {first['Text']}"
+
+            return ""
+        except Exception:
+            return ""
 
     def _check_knowledge(self, user_input: str) -> Optional[str]:
         """Check all knowledge sources for quick responses"""

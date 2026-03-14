@@ -21,9 +21,17 @@ except ImportError:
 
 import sys
 import os
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import config
-from .utils import safe_type as _safe_type
+try:
+    from utils import safe_type as _safe_type
+except ImportError:
+    def _safe_type(text):
+        try:
+            import pyautogui
+            pyautogui.typewrite(text, interval=0.05)
+        except Exception:
+            pass
 
 
 class CommunicationManager:
